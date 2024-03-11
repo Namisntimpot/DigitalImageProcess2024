@@ -2,6 +2,9 @@
 
 #include<string>
 #include<memory>
+#include<algorithm>
+
+#define __STDC_LIB_EXT1__
 
 #ifndef STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
@@ -13,7 +16,8 @@
 #include "stb_image_write.h"
 #endif // !STB_IMAGE_WRITE_IMPLEMENTATION
 
-#define MAX_COLOR_LEVEL 255
+#define MAX_COLOR_LEVEL_VALUE 255
+#define MAX_COLOR_LEVEL_COUNT 256
 
 using std::string;
 
@@ -41,7 +45,7 @@ public:
 	void SetPixel(ColorU8& color, int h, int w);
 	Image&& PointTransformFromTable(unsigned char* table);
 
-	int Write(const char* path);
+	int Write(const string& path);
 };
 
 class Histogram {

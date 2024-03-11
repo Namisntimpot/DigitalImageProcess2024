@@ -2,6 +2,9 @@
 //
 
 #include <iostream>
+#define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+// 避免重复引入 stbi_xxx.h
 #include "Image.h"
 
 int main()
@@ -11,8 +14,8 @@ int main()
     Histogram hist(img);
     hist.Equalize();
     Image equalized = img.PointTransformFromTable(hist.GetLevelMapTable());
-    const char* output = "image/sleepcat_histeq.jpg";
-    equalized.Write(output);
+    //string output("image/sleepcat_histeq.jpg");
+    //equalized.Write(output);
     return 0;
 }
 
