@@ -12,10 +12,16 @@ int main()
     const char* p = "image/sleepcat.jpg";
     Image img(p);
     Histogram hist(img);
+    hist.Draw("image/sleepcat_hist.png");
     hist.Equalize();
     Image equalized = img.PointTransformFromTable(hist.GetLevelMapTable());
+    Histogram equalized_hist(equalized);
+    equalized_hist.Draw("image/sleepcat_equalized_hist.png");
     //string output("image/sleepcat_histeq.jpg");
     //equalized.Write(output);
+    //Image linear = img.PointTransformLinear(0, 255, 100, 150);
+    //string output("image/sleepcat_linear_transform.jpg");
+    //linear.Write(output);
     return 0;
 }
 
