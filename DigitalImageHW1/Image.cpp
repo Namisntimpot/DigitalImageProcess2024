@@ -72,6 +72,26 @@ Image Image::PointTransformLinear(int lorigin, int rorigin, int ltarget, int rta
 	return img;
 }
 
+// 目前只考虑rbg三通道和单通道. 如果本就是单通道，则返回一个深拷贝，而不是共享内存. 如果不是这两种情况，调用它返回全0空图
+Image Image::ConvertToGray() {
+	Image gray_img(height, width, 1);
+	if(channels == 3) {
+		for (int i = 0; i < height; ++i) {
+			for (int j = 0; j < width; ++j) {
+				int offset_gray = i * width + j;
+				int offset = offset_gray * 3;
+				float r = m_rawdata[offset], g = m_rawdata[offset + 1], b = m_rawdata[offset + 2];
+				float gray = 0.299 * r + 0.587 * g + 0.114 * b;
+				gray_img.m_rawdata[offset_gray] = static_cast<unsigned char>(gray);
+			}
+		}
+	}
+	else if (channels == 1) {
+		std::copy(m_rawdata.get(), m_rawdata.get() + height * width, gray_img.m_rawdata.get());
+	}
+	return gray_img;
+}
+
 // 目前只支持输出png.
 int Image::Write(const string& path) {
 	string extension = path.substr(path.length() - 4);
@@ -91,7 +111,7 @@ Histogram::Histogram(int h, int w, int channels) : channels(channels), height(h)
 	m_histdata = std::shared_ptr<unsigned int[]>(new unsigned int[MAX_COLOR_LEVEL_COUNT * channels]());  // 应该初始化为0了..?
 }
 
-Histogram::Histogram(Image& image) : channels(image.channels), height(image.height), width(image.height), m_level_map_table(NULL) {
+Histogram::Histogram(Image& image) : channels(image.channels), height(image.height), width(image.width), m_level_map_table(NULL) {
 	m_histdata = std::shared_ptr<unsigned int[]>(new unsigned int[MAX_COLOR_LEVEL_COUNT * image.channels]());
 	for (int i = 0; i < image.height; ++i) {
 		for (int j = 0; j < image.width; ++j) {
@@ -138,12 +158,12 @@ void Histogram::Equalize() {
 			cumulation[off + j] = cumulation[last + j] + m_histdata[off + j];
 		}
 	}
-	
+
 	// 计算转换表.
 	m_level_map_table = std::shared_ptr<unsigned char[]>(new unsigned char[MAX_COLOR_LEVEL_COUNT * channels]);
 	int hw = height * width;
 	for (int i = 0; i < MAX_COLOR_LEVEL_COUNT * channels; ++i) {
-		m_level_map_table[i] = static_cast<unsigned char>(std::round(static_cast<double>(cumulation[i]) * MAX_COLOR_LEVEL_VALUE / hw));
+		m_level_map_table[i] = static_cast<unsigned char>(std::round(static_cast<double>(cumulation[i]) / hw * MAX_COLOR_LEVEL_VALUE));
 	}
 }
 

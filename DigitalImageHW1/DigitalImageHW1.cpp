@@ -9,14 +9,35 @@
 
 int main()
 {
-    const char* p = "image/sleepcat.jpg";
-    Image img(p);
-    Histogram hist(img);
-    hist.Draw("image/sleepcat_hist.png");
-    hist.Equalize();
-    Image equalized = img.PointTransformFromTable(hist.GetLevelMapTable());
-    Histogram equalized_hist(equalized);
-    equalized_hist.Draw("image/sleepcat_equalized_hist.png");
+    const int n_imgs = 2;
+    const string imgs[] = {"image/sleepcat","image/yunnan"};
+    for (int i = 0; i < n_imgs; ++i) {
+        const string origin = imgs[i] + ".jpg";
+        Image im(origin);
+        Histogram hist(im);
+        hist.Draw(imgs[i] + "_hist.png");
+        hist.Equalize();
+        Image equalized = im.PointTransformFromTable(hist.GetLevelMapTable());
+        equalized.Write(imgs[i] + "_equalized.jpg");
+        Histogram equalized_hist(equalized);
+        equalized_hist.Draw(imgs[i] + "_hist_equalized.png");
+
+        // 线性拉伸
+        Image transformed1 = im.PointTransformLinear(50, 200, 120, 160);
+        transformed1.Write(imgs[i] + "_linear1.jpg");
+        Image transformed2 = im.PointTransformLinear(100, 150, 20, 255);
+        transformed2.Write(imgs[i] + "_linear2.jpg");
+    }
+    //const char* p_cat = "image/sleepcat.jpg";
+    //const char* p_yunnan = "image/yunnan.jpg";
+    //const char* p = "image/sleepcat.jpg";
+    //Image img(p);
+    //Histogram hist(img);
+    //hist.Draw("image/sleepcat_hist.png");
+    //hist.Equalize();
+    //Image equalized = img.PointTransformFromTable(hist.GetLevelMapTable());
+    //Histogram equalized_hist(equalized);
+    //equalized_hist.Draw("image/sleepcat_equalized_hist.png");
     //string output("image/sleepcat_histeq.jpg");
     //equalized.Write(output);
     //Image linear = img.PointTransformLinear(0, 255, 100, 150);

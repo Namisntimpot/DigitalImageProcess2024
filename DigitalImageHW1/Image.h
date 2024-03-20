@@ -49,6 +49,7 @@ public:
 	void SetPixel(ColorU8& color, int h, int w);
 	Image PointTransformFromTable(unsigned char* table);
 	Image PointTransformLinear(int lorigin, int rorigin, int ltarget, int rtarget);
+	Image ConvertToGray();
 
 	int Write(const string& path);
 };
