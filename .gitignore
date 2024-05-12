@@ -1,0 +1,6 @@
+*
+!.gitignore
+!/DigitalImageHW1
+!/DigitalImageHW2
+!/*.md
+!/hw2-report.pptx
