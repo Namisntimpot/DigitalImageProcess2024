@@ -1,0 +1,5 @@
+/runs
+/orl_faces
+__pycache__
+*.pt
+*.txt
