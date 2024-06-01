@@ -2,5 +2,6 @@
 !.gitignore
 !/DigitalImageHW1
 !/DigitalImageHW2
+!/DigitalImageHW3
 !/*.md
 !/hw2-report.pptx
