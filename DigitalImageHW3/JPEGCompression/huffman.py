@@ -88,7 +88,7 @@ def ComputeHuffmanCodeFromScratch(arr:list) -> dict:
         coding_tuple[i] = (k, c)
         coding_dict[k] = c
 
-    print(coding_tuple)
+    #print(coding_tuple)
 
     return coding_dict, coding_tuple
 

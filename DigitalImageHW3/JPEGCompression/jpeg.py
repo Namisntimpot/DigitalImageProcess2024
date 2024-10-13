@@ -45,10 +45,10 @@ def jpeg(img:np.ndarray, out_path:str, quality_coef = 1):
     f.flush(output_0xff_callback)
 
 def main():
-    img = cv2.imread("./catgirl.png")
+    img = cv2.imread("./img.png")
     img =cv2.cvtColor(img,cv2.COLOR_BGR2YCrCb)
-    qua= 1
-    jpeg(img, "catgirl_compressed_{}.jpg".format(qua), qua)
+    qua= 0.5
+    jpeg(img, "img_compressed_{}.jpg".format(qua), qua)
     print("done")
 
 

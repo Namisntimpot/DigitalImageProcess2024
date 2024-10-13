@@ -1,6 +1,6 @@
 from bit_outstream import *
 import numpy as np
-
+from tqdm import tqdm
 '''
 参考：https://blog.csdn.net/yun_hen/article/details/78135122
 jpeg格式组成部分：
@@ -151,14 +151,13 @@ def output_mcus(
     
     n_mcus = len(y_dc_huffman)
     for dc_huf, ac_huf in zip([y_dc_huffman,cb_dc_huffman,cr_dc_huffman],[y_ac_huffman,cb_ac_huffman,cr_ac_huffman]):
-        for i in range(n_mcus):
+        for i in tqdm(range(n_mcus)):
             dc = dc_huf[i]
             ac = ac_huf[i * (n_elem_per_mcu-1) : (i+1)*(n_elem_per_mcu-1)]  # 每个mcu少了左上角那个!
             f.write(dc[0]+dc[1], output_0xff_callback)
             for a,b in ac:
                 f.write(a+b, output_0xff_callback)
     f.flush(output_0xff_callback)
-    print("finish")
 
 def output_eoi(f:BitOutStream):
     f.write(bytes([0xFF, 0xD9]))
